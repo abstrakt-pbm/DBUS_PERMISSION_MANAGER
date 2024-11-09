@@ -88,15 +88,16 @@ int SQLitePermissionStorage::initializeDefaultValues() {
 int SQLitePermissionStorage::makePermission(std::string permissionName, int permissionEnumCode) {
     int err = 0;
     
-    std::string mkpermRequest = "INSERT INTO permissions ( name, enumCode ) VALUES ( ?1, ?2)";
+    std::string mkpermRequest = "INSERT INTO permissions (name, enumCode) VALUES (?1, ?2)";
     sqlite3_stmt* mkPerPrepStatement;
-    sqlite3_prepare_v2(
+    int rc = sqlite3_prepare_v2(
         db,
         mkpermRequest.c_str(),
         mkpermRequest.length(),
         &mkPerPrepStatement,
         nullptr
     );
+
 
     sqlite3_bind_text(mkPerPrepStatement, 1, permissionName.c_str(), -1, SQLITE_TRANSIENT );
     sqlite3_bind_int(mkPerPrepStatement, 2, permissionEnumCode);
@@ -106,9 +107,43 @@ int SQLitePermissionStorage::makePermission(std::string permissionName, int perm
 
     if(recRes != SQLITE_DONE) {
         err = 1;
-        std::cout << std::format("error while making {}:{} permission", permissionName, permissionEnumCode);
+        std::cout << std::format("error while making {}:{} permission", permissionName, permissionEnumCode) << std::endl;
         sqlite3_finalize(mkPerPrepStatement);
     }
 
     return err;
 }
+
+int SQLitePermissionStorage::addPermissionToApplication(std::string pathToApplication, int permissionEnumCode) {
+    int err = 0;
+
+    std::string mkAddPermToAppReq = "INSERT INTO application_permissions (pathToExecutable, permissionEnumCode) VALUES (?1, ?2)";
+    sqlite3_stmt* mkAddPermToAppPrepStatement;
+    
+    int rc = sqlite3_prepare_v2(
+        db,
+        mkAddPermToAppReq.c_str(),
+        mkAddPermToAppReq.length(),
+        &mkAddPermToAppPrepStatement,
+        nullptr
+    );
+
+    if ( rc != SQLITE_OK ) {
+        std::cout <<"error while making prepare statement: " <<  rc << std::endl;
+    }
+
+    sqlite3_bind_text(mkAddPermToAppPrepStatement, 1, pathToApplication.c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_int(mkAddPermToAppPrepStatement, 2, permissionEnumCode);
+
+    int recRes = 0;
+    recRes = sqlite3_step(mkAddPermToAppPrepStatement);
+    if ( recRes != SQLITE_DONE ) {
+        err = 1;
+        std::cout << std::format("error while adding permission {} to {} | with code: {}", permissionEnumCode, pathToApplication, recRes) << std::endl;
+        sqlite3_finalize(mkAddPermToAppPrepStatement);
+    }
+
+    
+
+    return err;
+};
