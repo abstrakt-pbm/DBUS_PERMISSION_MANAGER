@@ -23,6 +23,7 @@ class DbusPermissionManager {
     void requestPermission(Permissions permission);
     bool checkApplicationHasPermission(std::string applicationExecPath, Permissions permission);
 
+    
 
     void start();
 

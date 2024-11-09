@@ -18,6 +18,11 @@ DbusPermissionManager::DbusPermissionManager(std::string serviceName, std::strin
 
 void DbusPermissionManager::registerMethods() {
   dbusObject->addVTable(
+    sdbus::registerMethod("RequestPermission")
+    .withInputParamNames("permissionEnumCode")
+    .implementedAs([this](int permissionEnumCode){this->requestPermission(static_cast<Permissions>(permissionEnumCode)); })
+    .withNoReply(),
+
     sdbus::registerMethod("CheckApplicationHasPermission")
     .withInputParamNames("applicationExecPath", "permissionEnumCode")
     .withOutputParamNames("isApplicationHasPermission")
@@ -26,6 +31,15 @@ void DbusPermissionManager::registerMethods() {
 }
 
 void DbusPermissionManager::registerSignals() {
+
+}
+
+void DbusPermissionManager::requestPermission(Permissions permission) {
+  int dbusClientPid = dbusObject->getCurrentlyProcessedMessage().getCredsPid();
+  std::string dbusClientPath = getAppExecPathByPid(dbusClientPid);
+  if(!permissionStorage->isApplicationHasPermition(dbusClientPath, permission)) {
+    permissionStorage->addPermissionToApplication(dbusClientPath, permission);
+  }
 
 }
 
