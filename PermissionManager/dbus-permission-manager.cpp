@@ -42,3 +42,10 @@ void DbusPermissionManager::start() {
   std::cout << "dbus permission manager start handling connections" << std::endl;
   dbusConnection->enterEventLoop();
 }
+
+std::string DbusPermissionManager::getAppExecPathByPid(int pid) {
+  char path[1024];
+  std::snprintf(path, sizeof(path), "/proc/%d/exe", pid);
+  ssize_t len = readlink(path, path, sizeof(path));
+  return std::string(path, len);
+}
