@@ -27,6 +27,8 @@ class DbusTimeService {
 
     void registerMethods();
 
+    std::string getAppExecPathByPid(int pid);
+
     public:
     DbusTimeService(std::string serviceName, std::string objectPath);
     uint64_t getSystemTime(); 
