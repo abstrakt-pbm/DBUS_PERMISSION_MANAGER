@@ -17,8 +17,15 @@ DbusPermissionManager::DbusPermissionManager(std::string serviceName, std::strin
 }
 
 void DbusPermissionManager::registerMethods() {
+  dbusObject->addVTable(
+
+  ).forInterface(serviceName);
 }
 
 void DbusPermissionManager::registerSignals() {
+
+}
+
+void DbusPermissionManager::requestPermission(Permissions permission) {
 
 }

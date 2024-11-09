@@ -14,4 +14,5 @@ class DbusPermissionManager {
 
     public:
     DbusPermissionManager(std::string serviceName, std::string objectPath);
+    void requestPermission(Permissions permission);
 }; 

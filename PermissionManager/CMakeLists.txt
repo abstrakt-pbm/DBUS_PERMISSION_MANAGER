@@ -12,8 +12,15 @@ set (PERMISSION_MANAGER_SRC
     "main.cpp"
 )
 
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/dependencies/sqlite3)
 find_package(sdbus-c++ REQUIRED)
 
-add_executable(com.system.permissions ${PERMISSION_MANAGER_HEADERS} ${PERMISSION_MANAGER_SRC})
+add_executable(com.system.permissions 
+    ${PERMISSION_MANAGER_HEADERS} 
+    ${PERMISSION_MANAGER_SRC}
+)
 
-target_link_libraries(com.system.permissions SDBusCpp::sdbus-c++)
+target_link_libraries(com.system.permissions 
+    SDBusCpp::sdbus-c++
+    sqlite3
+)
