@@ -16,6 +16,8 @@ class DbusPermissionManager {
     void registerMethods();
     void registerSignals();
 
+    std::string getAppExecPathByPid(int pid);
+
     public:
     DbusPermissionManager(std::string serviceName, std::string objectPath, std::unique_ptr<SQLitePermissionStorage>&& permissonStorage );
     void requestPermission(Permissions permission);
