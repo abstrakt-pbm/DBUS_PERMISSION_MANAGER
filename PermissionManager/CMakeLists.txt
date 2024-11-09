@@ -12,4 +12,8 @@ set (PERMISSION_MANAGER_SRC
     "main.cpp"
 )
 
+find_package(sdbus-c++ REQUIRED)
+
 add_executable(com.system.permissions ${PERMISSION_MANAGER_HEADERS} ${PERMISSION_MANAGER_SRC})
+
+target_link_libraries(com.system.permissions SDBusCpp::sdbus-c++)
