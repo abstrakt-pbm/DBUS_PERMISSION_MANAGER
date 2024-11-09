@@ -5,6 +5,7 @@
 
 SQLitePermissionStorage::SQLitePermissionStorage( std::string dbName) {
     std::cout << "start initializing database" << std::endl;
+
     int dbOpenRes = sqlite3_open(dbName.c_str(), &db);
     if ( dbOpenRes == SQLITE_OK ) {
         std::cout << std::format("database with name: {} sucessfully opened", dbName) << std::endl;
@@ -16,6 +17,14 @@ SQLitePermissionStorage::SQLitePermissionStorage( std::string dbName) {
     if (initTableRes == 1) {
         std::cout << "error while initializing tables" << std::endl;
     }
+
+    int initDefaultValuesRes = initializeDefaultValues();
+    if (initDefaultValuesRes == 1) {
+        std::cout << "error while initializing default values" << std::endl;
+    }
+    
+
+
     std::cout << "finishing initializing database" << std::endl;  
 }
 
@@ -36,12 +45,11 @@ int SQLitePermissionStorage::initializeTable() {
         nullptr
     );
 
-    char *err_msg = 0;
     int reqRes = 0;
     reqRes = sqlite3_step( createPermTablePrepStatemente );
     if (reqRes != SQLITE_DONE) {
         err = 1;
-        std::cout << "error while initializing permissions table" << std::string(err_msg) << std::endl;
+        std::cout << "error while initializing permissions table" << std::endl;
     }
     std::stringstream createApplicationPermissionTableStatement;
     createApplicationPermissionTableStatement << "CREATE TABLE IF NOT EXISTS application_permissions (";
@@ -63,7 +71,43 @@ int SQLitePermissionStorage::initializeTable() {
 
     if (reqRes != SQLITE_DONE) {
         err = 1;
-        std::cout << std::string(err_msg) << std::endl;
+        std::cout << "error while create application_permissions table" << std::endl;
+    }
+
+    return err;
+}
+
+int SQLitePermissionStorage::initializeDefaultValues() {
+    int err = 0;
+
+
+    return err;
+}
+
+
+int SQLitePermissionStorage::makePermission(std::string permissionName, int permissionEnumCode) {
+    int err = 0;
+    
+    std::string mkpermRequest = "INSERT INTO permissions ( name, enumCode ) VALUES ( ?1, ?2)";
+    sqlite3_stmt* mkPerPrepStatement;
+    sqlite3_prepare_v2(
+        db,
+        mkpermRequest.c_str(),
+        mkpermRequest.length(),
+        &mkPerPrepStatement,
+        nullptr
+    );
+
+    sqlite3_bind_text(mkPerPrepStatement, 1, permissionName.c_str(), -1, SQLITE_TRANSIENT );
+    sqlite3_bind_int(mkPerPrepStatement, 2, permissionEnumCode);
+
+    int recRes = 0;
+    recRes = sqlite3_step(mkPerPrepStatement);
+
+    if(recRes != SQLITE_DONE) {
+        err = 1;
+        std::cout << std::format("error while making {}:{} permission", permissionName, permissionEnumCode);
+        sqlite3_finalize(mkPerPrepStatement);
     }
 
     return err;
