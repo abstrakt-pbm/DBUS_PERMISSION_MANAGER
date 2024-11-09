@@ -79,6 +79,9 @@ int SQLitePermissionStorage::initializeTable() {
 
 int SQLitePermissionStorage::initializeDefaultValues() {
     int err = 0;
+    if( !isPermissionExists(0) ) {
+        err = makePermission("SystemTime", 0);
+    }
     return err;
 }
 
