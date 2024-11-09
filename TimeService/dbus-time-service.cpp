@@ -17,7 +17,11 @@ DbusTimeService::DbusTimeService(std::string serviceName, std::string objectPath
 }
 
 void DbusTimeService::registerMethods() {
-
+    dbusObject->addVTable(
+          sdbus::registerMethod("GetSystemTime")
+          .withOutputParamNames("CurrentSystemTime")
+          .implementedAs([this]() { return this->getSystemTime(); }))
+          .forInterface(serviceName);
 }
 
 
@@ -60,4 +64,9 @@ std::string DbusTimeService::getAppExecPathByPid(int pid) {
   std::snprintf(path, sizeof(path), "/proc/%d/exe", pid);
   ssize_t len = readlink(path, path, sizeof(path));
   return std::string(path, len);
+}
+
+void DbusTimeService::start() {
+    std::cout << "dbus time service start handling connections" << std::endl;
+    dbusConnection->enterEventLoop();
 }

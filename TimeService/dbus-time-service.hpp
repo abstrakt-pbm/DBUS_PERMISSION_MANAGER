@@ -32,5 +32,6 @@ class DbusTimeService {
     public:
     DbusTimeService(std::string serviceName, std::string objectPath);
     uint64_t getSystemTime(); 
+    void start();
 };
 
