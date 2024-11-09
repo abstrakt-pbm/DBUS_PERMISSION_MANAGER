@@ -11,4 +11,5 @@ public:
     SQLitePermissionStorage( std::string dbName );
     int makePermission(std::string permissionName, int permissionEnumCode);
     int addPermissionToApplication(std::string pathToApplication, int permissionEnumCode);
+    bool isApplicationHasPermition(std::string pathToApplication, int permissionEnumCode);
 };

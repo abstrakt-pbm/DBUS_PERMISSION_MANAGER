@@ -79,8 +79,6 @@ int SQLitePermissionStorage::initializeTable() {
 
 int SQLitePermissionStorage::initializeDefaultValues() {
     int err = 0;
-
-
     return err;
 }
 
@@ -143,7 +141,35 @@ int SQLitePermissionStorage::addPermissionToApplication(std::string pathToApplic
         sqlite3_finalize(mkAddPermToAppPrepStatement);
     }
 
-    
-
     return err;
 };
+
+bool SQLitePermissionStorage::isApplicationHasPermition(std::string pathToApplication, int permissionEnumCode) {
+    bool result = false;
+    std::string checkRequest = "SELECT TRUE FROM application_permissions WHERE pathToExecutable == ?1 AND permissionEnumCode == ?2";
+    sqlite3_stmt* checkReqPrepareStatement;
+
+    int rc = sqlite3_prepare_v2(
+        db,
+        checkRequest.c_str(),
+        checkRequest.length(),
+        &checkReqPrepareStatement,
+        nullptr
+    );
+
+    if ( rc != SQLITE_OK ) {
+        std::cout <<"error while making prepare statement: " <<  rc << std::endl;
+    }
+
+    sqlite3_bind_text(checkReqPrepareStatement, 1, pathToApplication.c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_int(checkReqPrepareStatement, 2, permissionEnumCode);
+
+    int recRes = sqlite3_step(checkReqPrepareStatement);
+    if (recRes) {
+        result = sqlite3_column_int(checkReqPrepareStatement, 0);
+    } else {
+        std::cout << std::format("error while cheaking: {} {}", pathToApplication, permissionEnumCode);
+    }
+
+    return result;
+}
