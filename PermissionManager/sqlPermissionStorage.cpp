@@ -173,3 +173,32 @@ bool SQLitePermissionStorage::isApplicationHasPermition(std::string pathToApplic
 
     return result;
 }
+
+bool SQLitePermissionStorage::isPermissionExists(int permissionEnumCode) {
+    bool result = false;
+    std::string isPermExistsReq = "SELECT TRUE FROM permissions WHERE enumCode == ?1";
+    sqlite3_stmt* checkReqPrepareStatement;
+
+    int rc = sqlite3_prepare_v2(
+        db,
+        isPermExistsReq.c_str(),
+        isPermExistsReq.length(),
+        &checkReqPrepareStatement,
+        nullptr
+    );
+
+    if ( rc != SQLITE_OK ) {
+        std::cout <<"error while making prepare statement: " <<  rc << std::endl;
+    }
+
+    sqlite3_bind_int(checkReqPrepareStatement, 1, permissionEnumCode);
+
+    int recRes = sqlite3_step(checkReqPrepareStatement);
+    if (recRes) {
+        result = sqlite3_column_int(checkReqPrepareStatement, 0);
+    } else {
+        std::cout << std::format("error while cheaking permission: {}", permissionEnumCode);
+    }
+
+    return result;
+}

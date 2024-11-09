@@ -12,4 +12,5 @@ public:
     int makePermission(std::string permissionName, int permissionEnumCode);
     int addPermissionToApplication(std::string pathToApplication, int permissionEnumCode);
     bool isApplicationHasPermition(std::string pathToApplication, int permissionEnumCode);
+    bool isPermissionExists(int permissionEnumCode);
 };
