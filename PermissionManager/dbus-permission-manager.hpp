@@ -1,11 +1,15 @@
 #pragma once
 #include <string>
 #include <sdbus-c++/sdbus-c++.h>
+#include "sqlPermissionStorage.hpp"
 
 enum Permissions { SystemTime = 0 };
 
+
 class DbusPermissionManager {
     private:
+    std::unique_ptr<SQLitePermissionStorage> permissionStorage;
+
     std::string serviceName;
     std::unique_ptr<sdbus::IConnection> dbusConnection;
     std::unique_ptr<sdbus::IObject> dbusObject;
@@ -13,6 +17,11 @@ class DbusPermissionManager {
     void registerSignals();
 
     public:
-    DbusPermissionManager(std::string serviceName, std::string objectPath);
+    DbusPermissionManager(std::string serviceName, std::string objectPath, std::unique_ptr<SQLitePermissionStorage>&& permissonStorage );
     void requestPermission(Permissions permission);
+    bool checkApplicationHasPermission(std::string applicationExecPath, Permissions permission);
+
+
+    void start();
+
 }; 

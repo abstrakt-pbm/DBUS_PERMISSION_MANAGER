@@ -2,5 +2,7 @@
 #include "sqlPermissionStorage.hpp"
 #include <iostream>
 int main (int argc, char *argv[]) {
-    SQLitePermissionStorage storage("permissions.db");
+    std::unique_ptr<SQLitePermissionStorage>storage (new SQLitePermissionStorage("permissions.db"));
+    DbusPermissionManager manager("com.system.permissions", "/com/system/permissions", std::move(storage) );
+    manager.start();
 }

@@ -1,7 +1,8 @@
 #include "dbus-permission-manager.hpp"
 #include <iostream>
+#include <format>
 
-DbusPermissionManager::DbusPermissionManager(std::string serviceName, std::string objectPath) {
+DbusPermissionManager::DbusPermissionManager(std::string serviceName, std::string objectPath, std::unique_ptr<SQLitePermissionStorage>&& permissionStoragePtr) : permissionStorage(std::move(permissionStoragePtr)) {
   std::cout << "start initilazing permission service" << std::endl;
 
   this->serviceName = serviceName;
@@ -9,7 +10,6 @@ DbusPermissionManager::DbusPermissionManager(std::string serviceName, std::strin
   dbusConnection = sdbus::createBusConnection(permissionManagerName);
   sdbus::ObjectPath permissionManagerPath{objectPath};
   dbusObject = sdbus::createObject(*dbusConnection, std::move(permissionManagerPath));
-
   registerMethods();
   registerSignals();
 
@@ -18,7 +18,10 @@ DbusPermissionManager::DbusPermissionManager(std::string serviceName, std::strin
 
 void DbusPermissionManager::registerMethods() {
   dbusObject->addVTable(
-
+    sdbus::registerMethod("CheckApplicationHasPermission")
+    .withInputParamNames("applicationExecPath", "permissionEnumCode")
+    .withOutputParamNames("isApplicationHasPermission")
+    .implementedAs([this](std::string applicationExecPath, int permissionEnumCode) { return this->checkApplicationHasPermission(applicationExecPath, static_cast<Permissions>(permissionEnumCode));})
   ).forInterface(serviceName);
 }
 
@@ -26,6 +29,16 @@ void DbusPermissionManager::registerSignals() {
 
 }
 
-void DbusPermissionManager::requestPermission(Permissions permission) {
+bool DbusPermissionManager::checkApplicationHasPermission(std::string applicationExecPath, Permissions permission ) {
+  if (applicationExecPath.length() == 0) {
+    throw sdbus::Error( sdbus::Error::Name{"com.system.permission.InvalidArgument"}, "Path to application can't be empty");
+  }else if (!permissionStorage->isPermissionExists(permission)) {
+    throw sdbus::Error( sdbus::Error::Name{"com.system.permission.InvalidArgument"}, "Permission with such enum code not exists");
+  }
+  return permissionStorage->isApplicationHasPermition(applicationExecPath, permission);
+}
 
+void DbusPermissionManager::start() {
+  std::cout << "dbus permission manager start handling connections" << std::endl;
+  dbusConnection->enterEventLoop();
 }
