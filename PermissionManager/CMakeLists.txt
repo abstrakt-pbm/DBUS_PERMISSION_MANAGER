@@ -5,10 +5,12 @@ set(CMAKE_CXX_STANDARD 20)
 
 set (PERMISSION_MANAGER_HEADERS
     "dbus-permission-manager.hpp"
+    "sqlPermissionStorage.hpp"
 )
 
 set (PERMISSION_MANAGER_SRC
     "dbus-permission-manager.cpp"
+    "sqlPermissionStorage.cpp"
     "main.cpp"
 )
 

@@ -5,7 +5,8 @@
 class SQLitePermissionStorage {
 private:
     sqlite3* db;
+    int initializeTable();
 public:
     SQLitePermissionStorage( std::string dbName );
-    
+
 };
