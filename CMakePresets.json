@@ -2,7 +2,7 @@
     "version": 3,
     "configurePresets": [
         {
-            "name": "linux",
+            "name": "linux_llvm",
             "generator": "Ninja",
             "displayName": "Linux, LLVM",
             "description": "compile project under linux using llvm",
@@ -13,6 +13,12 @@
                 "CMAKE_BUILD_TYPE" : "Release",
                 "CMAKE_RUNTIME_OUTPUT_DIRECTORY": "${sourceDir}/bin/"
             }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "linux_llvm",
+            "configurePreset": "linux_llvm"
         }
     ]
 }
