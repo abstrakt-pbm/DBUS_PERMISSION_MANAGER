@@ -1,0 +1,18 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "linux",
+            "generator": "Ninja",
+            "displayName": "Linux, LLVM",
+            "description": "compile project under linux using llvm",
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER" : "clang",
+                "CMAKE_CXX_COMPILER" : "clang++",
+                "CMAKE_BUILD_TYPE" : "Release",
+                "CMAKE_RUNTIME_OUTPUT_DIRECTORY": "${sourceDir}/bin/"
+            }
+        }
+    ]
+}
