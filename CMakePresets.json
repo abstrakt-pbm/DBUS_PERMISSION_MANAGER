@@ -13,12 +13,29 @@
                 "CMAKE_BUILD_TYPE" : "Release",
                 "CMAKE_RUNTIME_OUTPUT_DIRECTORY": "${sourceDir}/bin/"
             }
+        },
+        {
+            "name": "linux_gcc",
+            "generator": "Ninja",
+            "displayName": "Linux, gcc",
+            "description": "compile project under linux using llvm",
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER" : "gcc",
+                "CMAKE_CXX_COMPILER" : "g++",
+                "CMAKE_BUILD_TYPE" : "Release",
+                "CMAKE_RUNTIME_OUTPUT_DIRECTORY": "${sourceDir}/bin/"
+            }
         }
     ],
     "buildPresets": [
         {
             "name": "linux_llvm",
             "configurePreset": "linux_llvm"
+        },
+        {
+            "name" : "linux_gcc",
+            "configurePreset": "linux_gcc"
         }
     ]
 }
