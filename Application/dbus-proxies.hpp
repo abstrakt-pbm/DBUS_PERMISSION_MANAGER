@@ -1,28 +1,26 @@
 #pragma once
-#include <string>
 #include <sdbus-c++/sdbus-c++.h>
 
-enum Permissions {
-    SystemTime = 0
-};
+#include <string>
+
+enum Permissions { SystemTime = 0 };
 
 class DbusPermissionManagerProxy {
-    private:
-    std::string serviceName;
-    std::unique_ptr<sdbus::IProxy> dbusPrxy;
+ private:
+  std::string serviceName;
+  std::unique_ptr<sdbus::IProxy> dbusPrxy;
 
-    public:
-    DbusPermissionManagerProxy(std::string serviceName, std::string pathToObject);
-    void requestPermission(Permissions permission);
+ public:
+  DbusPermissionManagerProxy(std::string serviceName, std::string pathToObject);
+  void requestPermission(Permissions permission);
 };
 
-
 class DbusTimeServiceProxy {
-    private:
-    std::string serviceName;
-    std::unique_ptr<sdbus::IProxy> dbusPrxy;
+ private:
+  std::string serviceName;
+  std::unique_ptr<sdbus::IProxy> dbusPrxy;
 
-    public:
-    DbusTimeServiceProxy(std::string serviceName, std::string pathToObject);
-    uint64_t getSystemTime(); 
+ public:
+  DbusTimeServiceProxy(std::string serviceName, std::string pathToObject);
+  uint64_t getSystemTime();
 };
