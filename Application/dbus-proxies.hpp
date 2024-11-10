@@ -2,6 +2,10 @@
 #include <string>
 #include <sdbus-c++/sdbus-c++.h>
 
+enum Permissions {
+    SystemTime = 0
+};
+
 class DbusPermissionManagerProxy {
     private:
     std::string serviceName;
@@ -9,4 +13,5 @@ class DbusPermissionManagerProxy {
 
     public:
     DbusPermissionManagerProxy(std::string serviceName, std::string pathToObject);
+    void requestPermission(Permissions permission);
 };

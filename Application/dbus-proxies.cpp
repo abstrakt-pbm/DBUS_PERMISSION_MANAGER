@@ -11,3 +11,11 @@ DbusPermissionManagerProxy::DbusPermissionManagerProxy(std::string serviceName, 
     
     std::cout << "permission manager initializing finished" << std::endl;
 }
+
+void DbusPermissionManagerProxy::requestPermission(Permissions permission) {
+    dbusPrxy->callMethod("RequestPermission")
+    .onInterface(serviceName)
+    .withArguments(static_cast<int>(permission))
+    .dontExpectReply();
+
+}
