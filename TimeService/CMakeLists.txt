@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.20)
 project(DBUS_TIME_SERVICE)
 
 set(CMAKE_CXX_STANDARD 20)
