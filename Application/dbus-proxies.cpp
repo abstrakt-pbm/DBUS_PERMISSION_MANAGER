@@ -29,3 +29,11 @@ DbusTimeServiceProxy::DbusTimeServiceProxy(std::string serviceName, std::string 
 
     std::cout << "time service proxy initializing finished" << std::endl;
 }
+
+uint64_t DbusTimeServiceProxy::getSystemTime() {
+    uint64_t sysTimestemp;
+    dbusPrxy->callMethod("GetSystemTime")
+    .onInterface(serviceName)
+    .storeResultsTo(sysTimestemp);
+    return sysTimestemp;
+}

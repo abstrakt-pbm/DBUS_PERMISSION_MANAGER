@@ -24,5 +24,5 @@ class DbusTimeServiceProxy {
 
     public:
     DbusTimeServiceProxy(std::string serviceName, std::string pathToObject);
-    
+    uint64_t getSystemTime(); 
 };
