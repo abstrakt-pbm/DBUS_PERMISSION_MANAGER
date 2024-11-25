@@ -11,7 +11,7 @@ DbusPermissionManager::DbusPermissionManager(
 
   this->serviceName = serviceName;
   sdbus::ServiceName permissionManagerName{serviceName};
-  dbusConnection = sdbus::createBusConnection(permissionManagerName);
+  dbusConnection = sdbus::createSessionBusConnection(permissionManagerName);
   sdbus::ObjectPath permissionManagerPath{objectPath};
   dbusObject =
       sdbus::createObject(*dbusConnection, std::move(permissionManagerPath));
