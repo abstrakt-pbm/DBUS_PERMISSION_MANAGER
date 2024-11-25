@@ -38,7 +38,9 @@ DbusPermissionManagerProxy::DbusPermissionManagerProxy(
   sdbus::ObjectPath objPath{pathToObject};
   auto dbusPrxyConn = sdbus::createSessionBusConnection();
   dbusPrxy =
-      sdbus::createProxy(std::move(dbusPrxyConn), std::move(permissionManagerProxy), std::move(objPath));
+      sdbus::createProxy(std::move(dbusPrxyConn),
+                         std::move(permissionManagerProxy),
+                         std::move(objPath));
 
   std::cout << "dbus permission proxy initialized" << std::endl;
 }
