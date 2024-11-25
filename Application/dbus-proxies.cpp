@@ -9,7 +9,8 @@ DbusPermissionManagerProxy::DbusPermissionManagerProxy(std::string serviceName,
   this->serviceName = serviceName;
   sdbus::ServiceName permissionManagerName{serviceName};
   sdbus::ObjectPath permissionManagerObjPath{objectPath};
-  dbusPrxy = sdbus::createProxy(std::move(permissionManagerName),
+  auto dbusPrxyConn = sdbus::createSessionBusConnection();
+  dbusPrxy = sdbus::createProxy(std::move(dbusPrxyConn), std::move(permissionManagerName),
                                 std::move(permissionManagerObjPath));
 
   std::cout << "permission manager proxy initializing finished" << std::endl;
@@ -29,7 +30,8 @@ DbusTimeServiceProxy::DbusTimeServiceProxy(std::string serviceName,
   this->serviceName = serviceName;
   sdbus::ServiceName timeServiceProxyName{serviceName};
   sdbus::ObjectPath timeServiceObjPath{objectPath};
-  dbusPrxy = sdbus::createProxy(std::move(timeServiceProxyName),
+  auto dbusPrxyConn = sdbus::createSessionBusConnection();
+  dbusPrxy = sdbus::createProxy(std::move(dbusPrxyConn) ,std::move(timeServiceProxyName),
                                 std::move(timeServiceObjPath));
 
   std::cout << "time service proxy initializing finished" << std::endl;
