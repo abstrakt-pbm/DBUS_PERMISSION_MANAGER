@@ -9,7 +9,7 @@ DbusTimeService::DbusTimeService(std::string serviceName,
 
   this->serviceName = serviceName;
   sdbus::ServiceName timeServiceName{serviceName};
-  dbusConnection = sdbus::createBusConnection(timeServiceName);
+  dbusConnection = sdbus::createSessionBusConnection(timeServiceName);
   sdbus::ObjectPath timeServicePath{objectPath};
   dbusObject = sdbus::createObject(*dbusConnection, std::move(timeServicePath));
   permissionManagerProxy = std::unique_ptr<DbusPermissionManagerProxy>{
